@@ -1,0 +1,402 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:
+System Name:
+System Number:
+Programmer:
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+// #ENABLE_DYNAMIC
+#SYMBOL_NAME "Climate Control - CFS - JNV"
+// #HINT ""
+#CATEGORY "46" "JNV"
+
+#DEFINE_CONSTANT	NR_OF_ZONES			8
+#DEFINE_CONSTANT	ALL_ZONES			0
+
+#DEFINE_CONSTANT	SIZE_OF_FILENAME	256
+#DEFINE_CONSTANT	SIZE_MAX_FILE		4000
+
+
+// #PRINT_TO_TRACE
+// #DIGITAL_EXPAND 
+// #ANALOG_SERIAL_EXPAND 
+// #OUTPUT_SHIFT 
+// #HELP_PDF_FILE ""
+#DEFAULT_NONVOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+#ENCODING_ASCII
+// #ENCODING_UTF16
+// #ENCODING_INHERIT_FROM_PARENT
+// #ENCODING_INHERIT_FROM_PROGRAM
+/*
+#HELP_BEGIN
+   (add additional lines of help lines)
+#HELP_END
+*/
+
+/*******************************************************************************************
+  Include Libraries
+  (Uncomment and include additional libraries as needed)
+*******************************************************************************************/
+// #CRESTRON_LIBRARY ""
+// #USER_LIBRARY ""
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+// INPUTS
+DIGITAL_INPUT 	_SKIP_, _SKIP_, _SKIP_, _SKIP_, _SKIP_, _SKIP_,
+				file_load,
+				file_save,
+				zone_setpoint_up[NR_OF_ZONES],
+				zone_setpoint_down[NR_OF_ZONES];
+
+ANALOG_INPUT	zone_setpoint_in[NR_OF_ZONES],
+				zone_temperature_in[NR_OF_ZONES];
+
+// OUTPUTS
+DIGITAL_OUTPUT	_SKIP_, _SKIP_, _SKIP_, _SKIP_, _SKIP_, _SKIP_,
+				setpoints_changed, _SKIP_,
+				zone_on_fb[NR_OF_ZONES],
+				zone_off_fb[NR_OF_ZONES];
+
+ANALOG_OUTPUT	zone_setpoint_fb[NR_OF_ZONES];
+
+/*******************************************************************************************
+  SOCKETS
+  (Uncomment and define socket definitions as needed)
+*******************************************************************************************/
+// TCP_CLIENT
+// TCP_SERVER
+// UDP_SOCKET
+
+/*******************************************************************************************
+  Parameters
+  (Uncomment and declare parameters as needed)
+*******************************************************************************************/
+INTEGER_PARAMETER	setpoint_min, setpoint_max, setpoint_default, setpoint_increment, hysteresis;
+STRING_PARAMETER	file_name$[SIZE_OF_FILENAME];
+
+
+/*******************************************************************************************
+  Parameter Properties
+  (Uncomment and declare parameter properties as needed)
+*******************************************************************************************/
+/*
+#BEGIN_PARAMETER_PROPERTIES parameter_variable, parameter_variable, ...
+   // propValidUnits = // unitString or unitDecimal|unitHex|unitPercent|unitCharacter|unitTime|unitTicks;
+   // propDefaultUnit = // unitString, unitDecimal, unitHex, unitPercent, unitCharacter, unitTime or unitTicks;
+   // propBounds = lower_bound , upper_bound;
+   // propDefaultValue = ;  // or, propDefaultValue = "";
+   // propList = // { "value" , "label" } , { "value" , "label" } , ... ;
+   // propShortDescription = "status_bar_hint_text";
+   // #BEGIN_PROP_FULL_DESCRIPTION  line_1...  line_2...  line_n  #END_PROP_FULL_DESCRIPTION
+   // #BEGIN_PROP_NOTES line_1...  line_2...  line_n  #END_PROP_NOTES
+#END_PARAMETER_PROPERTIES
+*/
+
+/*******************************************************************************************
+  Structure Definitions
+  (Uncomment and define structure definitions as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: struct.myString = "";
+*******************************************************************************************/
+
+/*******************************************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: myString = "";
+*******************************************************************************************/
+integer zone_setpoint[NR_OF_ZONES];
+
+integer	initialized, busy;
+
+/*******************************************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+*******************************************************************************************/
+function FileLoad()
+{
+	signed_integer file_handle;
+	integer z, err, sp, pos;
+	string file$[SIZE_MAX_FILE];
+	
+	StartFileOperations();
+
+	file_handle = FileOpen(file_name$, _O_RDONLY | _O_TEXT) ;
+	if(file_handle < 0)
+	{
+		GenerateUserError("ERROR: Climate Control - CFS - JNV: Unable to open file: %s\n", file_name$);
+
+		// If file not exsist, start off with defaults
+		for(z = 1 to NR_OF_ZONES)
+		{
+			zone_setpoint[z] = setpoint_default;
+		}
+    }
+    else
+    {	
+		print("NOTICE: Climate Control - CFS - JNV: Reading File: %s\n", file_name$);
+	     
+		err = FileRead(file_handle, file$, SIZE_MAX_FILE);
+		if(err < 0)
+		{
+			GenerateUserError("ERROR: Climate Control - CFS - JNV: ReadString(%s) Error Code: %d\n", file$, err);
+        }
+		else
+		{
+			// Parse file
+			pos = find("CLIMATE_CONTROL", file$);
+			if(pos)
+			{
+				pos = pos + 17;
+
+				// Zone Setpoints
+				for(z = 1 to NR_OF_ZONES)
+				{
+					pos = find("ZONE_SETPOINT", file$, pos);
+					if(pos)
+					{
+						pos = pos + 15;
+						sp = atoi(mid(file$, pos, SIZE_MAX_FILE));
+
+						if((sp < setpoint_min) || (sp > setpoint_max))
+							sp = setpoint_default;		
+
+						zone_setpoint[z] = sp;						
+					}	
+				}
+			}
+		}
+
+    	err = FileClose(file_handle);
+    	if(err)
+			GenerateUserError("ERROR: Climate Control - CFS - JNV: Unable to close file: %s (handle: %d)\n", file_name$, file_handle);
+    }
+      
+	EndFileOperations();
+}
+ 
+ 
+function FileSave()
+{
+	signed_integer file_handle;
+	integer z, err;
+	string file$[SIZE_MAX_FILE];
+		
+	StartFileOperations();
+	
+	file_handle = FileOpen(file_name$, _O_WRONLY | _O_CREAT | _O_TRUNC | _O_TEXT) ;
+	if(file_handle < 0)
+	{
+		GenerateUserError("ERROR: Climate Control - CFS - JNV: Unable to open/create file: %s\n", file_name$);
+   	}
+   	else
+   	{
+		print("NOTICE: Climate Control - CFS - JNV: Saving File: %s\n", file_name$);
+
+		file$ = file$ + "CLIMATE_CONTROL\n";
+
+		// Zone Setpoints
+		for(z = 1 to NR_OF_ZONES)
+		{
+			file$ = file$ + "ZONE_SETPOINT" + itoa(z) + ": " + itoa(zone_setpoint[z]) + "\n";
+		}
+	     
+		err = FileWrite(file_handle, file$, len(file$));
+		if(err < 0)
+			GenerateUserError("ERROR: Climate Control - CFS - JNV: WriteString(%s) Error Code: %d\n", file$, err);
+
+   		err = FileClose(file_handle);
+   		if(err)
+			GenerateUserError("ERROR: Climate Control - CFS - JNV: Unable to close file: %s (handle: %d)\n", file_name$, file_handle);
+    }
+      
+	EndFileOperations();
+}
+
+
+function UpdateZoneFB(integer zone)
+{
+	if(zone_setpoint_fb[zone] <> zone_setpoint[zone])
+	{
+		setpoints_changed = 1;
+		setpoints_changed = 0;
+	}
+
+	zone_setpoint_fb[zone] = zone_setpoint[zone];
+
+	if((zone_setpoint[zone] - hysteresis) > zone_temperature_in[zone]) 
+	{
+		zone_on_fb[zone]  = 1;
+		zone_off_fb[zone] = 0;
+	}
+	if((zone_setpoint[zone] + hysteresis) < zone_temperature_in[zone]) 
+	{
+		zone_on_fb[zone]  = 0;
+		zone_off_fb[zone] = 1;
+	}
+}
+
+
+function UpdateFB(integer zone)
+{
+	integer z;
+ 
+	if(zone = ALL_ZONES)
+	{
+		for(z = 1 to NR_OF_ZONES)
+		{
+			UpdateZoneFB(z);
+	    }    
+	}
+	else
+		{
+			UpdateZoneFB(zone);
+	    }    
+}
+
+
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+push file_load
+{
+	FileLoad();
+
+	UpdateFB(ALL_ZONES);
+}
+
+
+push file_save
+{
+	FileSave();
+}
+
+
+change zone_setpoint_in
+{
+	integer z;
+	z = getlastmodifiedarrayindex();
+    
+	if(initialized)
+	{
+		if((zone_setpoint_in[z] < setpoint_min) || (zone_setpoint_in[z] > setpoint_max))
+			zone_setpoint[z] = setpoint_default;
+		else
+			zone_setpoint[z] = zone_setpoint_in[z];
+
+		UpdateFB(z);
+	}
+}
+
+
+change zone_temperature_in
+{
+	integer z;
+	z = getlastmodifiedarrayindex();
+
+	if(initialized)
+	{
+		UpdateFB(z);
+	}
+}
+   
+
+push zone_setpoint_up
+{
+	integer z;
+	z = getlastmodifiedarrayindex();
+
+	if(initialized)
+	{
+		if(!busy)
+		{
+			busy = 1;
+			while(zone_setpoint_up[z])
+			{
+				if(zone_setpoint[z] < setpoint_max) 
+				{
+					zone_setpoint[z] = zone_setpoint[z] + setpoint_increment; 
+				}
+	
+				UpdateFB(z); 
+
+				delay(40);
+			}				
+			busy = 0;
+		}
+	}
+}
+   
+
+push zone_setpoint_down
+{
+	integer z;
+	z = getlastmodifiedarrayindex();
+
+	if(initialized)
+	{
+		if(!busy)
+		{
+			busy = 1;
+			while(zone_setpoint_down[z])
+			{
+				if(zone_setpoint[z] > setpoint_min) 
+				{
+					zone_setpoint[z] = zone_setpoint[z] - setpoint_increment; 
+   				}
+	
+				UpdateFB(z); 
+
+				delay(40);
+			}				
+			busy = 0;
+		}
+	}
+}
+    
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+Function Main()
+{
+	integer z;
+
+	initialized = 0;
+
+    WaitForInitializationComplete();
+
+ 	// Recall last zone setpoints from NVRAM
+	for(z = 1 to NR_OF_ZONES)
+	{
+		if((zone_setpoint[z] < setpoint_min) || (zone_setpoint[z] > setpoint_max))
+			zone_setpoint[z] = setpoint_default;		
+
+		zone_setpoint_fb[z] = zone_setpoint[z];		
+	}
+
+	busy = 0;
+	initialized = 1;
+
+	UpdateFB(ALL_ZONES);
+}
+

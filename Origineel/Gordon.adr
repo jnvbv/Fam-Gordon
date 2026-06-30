@@ -1,0 +1,13 @@
+[Entries]
+IPADedgar=tcp 10.0.1.12
+AP2=tcp 10.0.1.211
+IPAD=tcp 10.0.1.38
+
+[Settings]
+DefaultEntry=
+
+[Comments]
+IPADedgar=
+AP2=
+IPAD=
+

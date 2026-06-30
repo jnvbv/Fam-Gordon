@@ -1,0 +1,357 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x80000000         0x00500000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+                0x00000000                __DYNAMIC=0x0
+                0x00400000                PROVIDE (__stack, 0x400000)
+                0x00000000                PROVIDE (hardware_init_hook, 0x0)
+                0x00000000                PROVIDE (_hardware_init_hook, 0x0)
+                0x00000000                PROVIDE (software_init_hook, 0x0)
+                0x00000000                PROVIDE (_software_init_hook, 0x0)
+
+.text           0x80000000    0x167a0
+ *(.text)
+ .text          0x80000000     0x145c S2_Selection_Manager___JNV.o
+                0x8000125e                S2_Selection_Manager___JNVEventHandler00004
+                0x8000130a                S2_Selection_Manager___JNVEventHandler00006
+                0x80000856                S2_Selection_Manager___JNVEventHandler00005
+                0x8000139e                S2_Selection_Manager___JNVEventHandler00007
+                0x80000c78                S2_Selection_Manager___JNV_main
+                0x800011ae                S2_Selection_Manager___JNVEventHandler00003
+                0x80001022                S2_Selection_Manager___JNVEventHandler00000
+                0x80001124                S2_Selection_Manager___JNVEventHandler00002
+                0x8000109a                S2_Selection_Manager___JNVEventHandler00001
+                0x80000f9e                S2_Selection_Manager___JNV__SPLS_TMPVAR__WAITLABEL_0__
+                0x80000b7e                S2_Selection_Manager___JNV_EventHandler
+ .text          0x8000145c      0x580 S2_Toggle_Non_Volatile___JNV.o
+                0x800017da                S2_Toggle_Non_Volatile___JNVEventHandler00000
+                0x80001750                S2_Toggle_Non_Volatile___JNV_EventHandler
+                0x80001622                S2_Toggle_Non_Volatile___JNV_main
+                0x8000145c                S2_Toggle_Non_Volatile___JNVEventHandler00002
+                0x800018dc                S2_Toggle_Non_Volatile___JNVEventHandler00001
+ .text          0x800019dc     0x9168 S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_Processor.o
+                0x80009bbc                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_ProcessorEventHandler00009
+                0x8000a60c                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_Processor_main
+                0x80003198                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_ProcessorEventHandler00004
+                0x8000945e                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_ProcessorEventHandler00007
+                0x8000a1bc                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_ProcessorEventHandler0000A
+                0x80009192                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_ProcessorEventHandler00005
+                0x80002b0c                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_ProcessorEventHandler00002
+                0x8000a4de                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_Processor_EventHandler
+                0x80002480                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_ProcessorEventHandler00000
+                0x80002e52                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_ProcessorEventHandler00003
+                0x8000aa66                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_ProcessorEventHandler0000B
+                0x800095c4                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_ProcessorEventHandler00008
+                0x800027c6                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_ProcessorEventHandler00001
+                0x800092f8                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_ProcessorEventHandler00006
+ .text          0x8000ab44     0x3d10 S2_Light_Scenes___12_Zones___CFS___JNV.o
+                0x8000e58e                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler0000A
+                0x8000db66                S2_Light_Scenes___12_Zones___CFS___JNV_EventHandler
+                0x8000e352                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler00004
+                0x8000e308                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler00003
+                0x8000e5f8                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler0000B
+                0x8000e4ba                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler00007
+                0x8000e27a                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler00002
+                0x8000dca4                S2_Light_Scenes___12_Zones___CFS___JNV_main
+                0x8000e450                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler00006
+                0x8000e39c                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler00005
+                0x8000e1ce                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler00000
+                0x8000d7da                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler00009
+                0x8000e706                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler0000C
+                0x8000e524                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler00008
+                0x8000e230                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler00001
+                0x8000e770                S2_Light_Scenes___12_Zones___CFS___JNVEventHandler0000D
+ .text          0x8000e854     0x5836 library.o
+                0x80012a40                RotateRightLong
+                0x8001304e                IsSystem
+                0x800129a4                Seed
+                0x8001029c                Remove
+                0x80012620                Ltoa
+                0x8001234c                Atoi
+                0x800116b4                InitRampInfoArray
+                0x80012dfa                Right
+                0x80013e2a                LockInputSema
+                0x800128ce                Mod
+                0x80012ab6                Getc
+                0x80012802                SMuldiv
+                0x80013030                IsHidden
+                0x800126e6                Min
+                0x80013c3e                hextosi
+                0x800131d4                WriteIntegerArray
+                0x8001374a                GetSignedIntArrayElementPtr
+                0x8001206e                CheckStructArray
+                0x80013c52                hextosl
+                0x8001335a                WriteSignedIntegerArray
+                0x80011d36                InitStringParamArray
+                0x80011008                ReadSignedLongIntegerArray
+                0x8000ff2a                GatherToDelimiter
+                0x80011b5a                InitStringArray
+                0x800126c0                Max
+                0x8001308a                IsReadOnly
+                0x800127ca                SMax
+                0x800100ce                GatherByLength
+                0x8001255a                Chr
+                0x800131ac                ReadSignedLongInteger
+                0x800125d8                Itohex
+                0x80011fe0                GetStructArrayElement
+                0x800122d4                UNS_SetByte
+                0x80012dce                ReverseFindi
+                0x800114b0                ReadStringArray
+                0x8001355a                GetIntArrayElementPtr
+                0x80012c0a                Lower
+                0x800129c0                RotateLeft
+                0x80013d72                ResizeIfAutogrow
+                0x800117e0                CheckInputArray
+                0x8000edc2                ResizeStringArray
+                0x800124ec                Atosl
+                0x80012314                High
+                0x80012970                Rnd
+                0x80012892                UMod
+                0x80012a16                RotateLeftLong
+                0x80013e9e                FindNumericChar
+                0x800139a2                CheckIOArrayBounds2
+                0x80012fe8                MakeProgramFilename
+                0x800127e6                SMin
+                0x80012b3e                Left
+                0x80012a80                CheckBufferThreshold
+                0x80013164                ReadSignedInteger
+                0x8001233e                LowWord
+                0x8000e854                Bit
+                0x80013114                ReadLongInteger
+                0x80012152                Byte
+                0x80013652                GetLongArrayElementPtr
+                0x80012da0                ReverseFind
+                0x80012ffe                GetSeries
+                0x80013f6a                InitTcpServer
+                0x80012bf2                Len
+                0x80013a72                InitializeRampInfoInternal
+                0x8001270c                Divide
+                0x80012458                Atol
+                0x80012ff4                GetModelNumber
+                0x8001393a                CheckIOArrayBounds
+                0x8001183a                CheckStringInputArray
+                0x8001341c                WriteSignedLongIntegerArray
+                0x80011f2a                GetStringArrayElement
+                0x80012664                Ltohex
+                0x80012590                Itoa
+                0x800129ea                RotateRight
+                0x8001058a                InternalReverseFind
+                0x800130f4                WriteLongInteger
+                0x80011a5e                InitDynamicStringStruct
+                0x80011950                SetStringArray
+                0x80010de6                ReadSignedIntegerArray
+                0x80011894                SetOutputArray
+                0x800130a4                WriteInteger
+                0x80011ebe                InitStructDynamicArray
+                0x80010814                SetString
+                0x8001290a                Random
+                0x8001313c                WriteSignedInteger
+                0x8000eab8                Find
+                0x80013008                GetProgramNumber
+                0x80012cde                Mid
+                0x80013edc                InitTcpClient
+                0x8000f9a6                ResizeStructArray
+                0x80013842                GetSignedLongArrayElementPtr
+                0x80013c64                hextol
+                0x8001122a                ReadString
+                0x80011bf0                InitDynamicStringArray
+                0x80013d4a                UpperChar
+                0x800123e8                Atosi
+                0x800130cc                ReadInteger
+                0x8001277e                Muldiv
+                0x80011902                SetStringOutputArray
+                0x800134e0                WriteString
+                0x8000f41a                ResizeIntegerArray
+                0x800117a8                InitInOutArray
+                0x80011dfe                InitNvramStringArray
+                0x800126a8                Abs
+                0x8001284e                SDivide
+                0x800109a4                ReadIntegerArray
+                0x8000e964                CompareStrings
+                0x80013d22                LowerChar
+                0x80013ffa                InitUdpSocket
+                0x80012a68                ClearBuffer
+                0x80012eb6                Upper
+                0x80011e9a                InitStructArray
+                0x80012f8c                MakeLower
+                0x8001306c                IsVolume
+                0x800103f6                RemoveByLength
+                0x800120ea                CheckStringOutputArrayIndex
+                0x80013296                WriteLongIntegerArray
+                0x80013b1e                InitRampInfoStructArray
+                0x80012330                HighWord
+                0x8000ec2c                ResizeString
+                0x80013012                IsDirectory
+                0x80010bc4                ReadLongIntegerArray
+                0x80012322                Low
+                0x8000fdd0                Gather
+                0x80012fba                MakeUpper
+                0x80011a20                InitStringStruct
+                0x80013a0a                CheckStringArrayBounds
+                0x80012750                CheckDenominator
+                0x80013c26                hextoi
+                0x80011348                WriteStringArray
+                0x80012212                SetByte
+                0x80013ac8                InitializeRampInfo
+                0x80013e64                UnLockInputSema
+                0x8001318c                WriteSignedLongInteger
+                0x80011b12                InitNvramStringStruct
+ *fill*         0x8001408a        0x6
+                0x80014090                .=ALIGN(0x10)
+ *(.eh_frame)
+                0x80014090                .=ALIGN(0x10)
+ *(.gnu.linkonce.t.*)
+                0x80014090                .=ALIGN(0x4)
+                0x80014090                __CTOR_LIST__=.
+                0x80014090                ___CTOR_LIST__=.
+                0x80014090        0x4 LONG 0x0 (((__CTOR_END__-__CTOR_LIST__)/0x4)-0x2)
+ *(.ctors)
+                0x80014094        0x4 LONG 0x0
+                0x80014098                __CTOR_END__=.
+                0x80014098                __DTOR_LIST__=.
+                0x80014098                ___DTOR_LIST__=.
+                0x80014098        0x4 LONG 0x0 (((__DTOR_END__-__DTOR_LIST__)/0x4)-0x2)
+ *(.dtors)
+                0x8001409c        0x4 LONG 0x0
+                0x800140a0                __DTOR_END__=.
+ *(.rodata)
+ .rodata        0x800140a0      0x310 S2_Selection_Manager___JNV.o
+ .rodata        0x800143b0      0x22f S2_Toggle_Non_Volatile___JNV.o
+ .rodata        0x800145df      0xe7e S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_Processor.o
+ .rodata        0x8001545d      0x6d2 S2_Light_Scenes___12_Zones___CFS___JNV.o
+ .rodata        0x80015b2f      0xc54 library.o
+ *(.gcc_except_table)
+ *fill*         0x80016783        0x1
+                0x80016784                .=ALIGN(0x2)
+                0x80016784                __INIT_SECTION__=.
+                0x80016784        0x4 LONG 0x4e560000
+ *(.init)
+                0x80016788        0x2 SHORT 0x4e5e
+                0x8001678a        0x2 SHORT 0x4e75
+                0x8001678c                __FINI_SECTION__=.
+                0x8001678c        0x4 LONG 0x4e560000
+ *(.fini)
+                0x80016790        0x2 SHORT 0x4e5e
+                0x80016792        0x2 SHORT 0x4e75
+ *(.lit)
+ *fill*         0x80016794        0xc
+                0x800167a0                .=ALIGN(0x10)
+                0x800167a0                _etext=.
+                0x800167a0                etext=.
+
+.data           0x800167a0        0x0
+                0x800167a0                copy_start=.
+ *(.shdata)
+ *(.data)
+ *(.gnu.linkonce.d.*)
+                0x800167a0                .=ALIGN(0x10)
+                0x800167a0                _edata=.
+                0x800167a0                copy_end=.
+
+.got
+ *(.got.plt)
+ *(.got)
+
+EntryList       0x800167a0      0x440
+ *(EntryList)
+ EntryList      0x800167a0      0x110 S2_Selection_Manager___JNV.o
+                0x800167a0                S2_Selection_Manager___JNV_Entry
+ EntryList      0x800168b0      0x110 S2_Toggle_Non_Volatile___JNV.o
+                0x800168b0                S2_Toggle_Non_Volatile___JNV_Entry
+ EntryList      0x800169c0      0x110 S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_Processor.o
+                0x800169c0                S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_Processor_Entry
+ EntryList      0x80016ad0      0x110 S2_Light_Scenes___12_Zones___CFS___JNV.o
+                0x80016ad0                S2_Light_Scenes___12_Zones___CFS___JNV_Entry
+                0x80016be0                .=ALIGN(0x4)
+
+FunctionList    0x80016be0        0x4
+ *(FunctionList)
+ FunctionList   0x80016be0        0x4 globals.o
+                0x80016be0                g_pFunctions
+                0x80016be4                .=ALIGN(0x4)
+
+.bss            0x80016be4        0x0
+                0x80016be4                .=ALIGN(0x4)
+                0x80016be4                __bss_start=.
+ *(.shbss)
+ *(.bss)
+ *(COMMON)
+                0x80016be8                _end=ALIGN(0x8)
+                0x80016be8                __end=_end
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges
+ *(.debug_aranges)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info
+ *(.debug_info)
+
+.debug_abbrev
+ *(.debug_abbrev)
+
+.debug_line
+ *(.debug_line)
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str
+ *(.debug_str)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+LOAD S2_Selection_Manager___JNV.o
+LOAD S2_Toggle_Non_Volatile___JNV.o
+LOAD S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_Processor.o
+LOAD S2_Light_Scenes___12_Zones___CFS___JNV.o
+LOAD globals.o
+LOAD library.o
+OUTPUT(_S2_Gordon___P1_Main.spl elf32-m68k)
+
+.comment        0x80016be4       0xe4
+ .comment       0x80016be4       0x26 S2_Selection_Manager___JNV.o
+ .comment       0x80016c0a       0x26 S2_Toggle_Non_Volatile___JNV.o
+ .comment       0x80016c30       0x26 S2_Denon_AVR_2308CI_2808CI_3808CI_4308CI_5805CI_888_988_Processor.o
+ .comment       0x80016c56       0x26 S2_Light_Scenes___12_Zones___CFS___JNV.o
+ .comment       0x80016c7c       0x26 globals.o
+ .comment       0x80016ca2       0x26 library.o

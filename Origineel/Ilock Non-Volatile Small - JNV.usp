@@ -1,0 +1,135 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:
+System Name:
+System Number:
+Programmer:
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+#CATEGORY "46" "JNV"
+#SYMBOL_NAME "Interlock NON-Volatile Small - JNV"
+#HINT "Interlock that remembers its state after a system reset"
+// #DEFINE_CONSTANT
+// #DEFAULT_VOLATILE
+#DEFAULT_NONVOLATILE
+/*
+#HELP_BEGIN
+   (add additional lines of help lines)
+#HELP_END
+*/
+
+/*******************************************************************************************
+  Include Libraries
+  (Uncomment and include additional librarys as needed)
+*******************************************************************************************/
+// #CRESTRON_LIBRARY ""
+// #USER_LIBRARY ""
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+DIGITAL_INPUT	clear, set_all;
+DIGITAL_INPUT	i[4];
+// ANALOG_INPUT 
+// STRING_INPUT 
+// BUFFER_INPUT 
+
+DIGITAL_OUTPUT	o[4];
+// ANALOG_OUTPUT 
+// STRING_OUTPUT 
+
+/*******************************************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+*******************************************************************************************/
+INTEGER		mem[4];
+// STRING
+
+/*******************************************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+*******************************************************************************************/
+
+function ClearAll()
+{
+	integer i;
+
+	for(i = 1 to 4)
+	{
+		mem[i]	= 0;
+		o[i]	= 0;
+	}
+}
+
+function SetAll()
+{
+	integer i;
+
+	for(i = 1 to 4)
+	{
+		mem[i]	= 1;
+		o[i]	= 1;
+	}
+}
+
+function Init()
+{
+	integer i;
+
+	for(i = 1 to 4)
+	{
+		o[i] = mem[i];
+		
+		if(mem[i] = 1)	
+			break;
+	}
+}
+
+
+
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+
+push clear
+{
+    call ClearAll();
+}
+
+push set_all
+{
+    call SetAll();
+}
+
+push i
+{
+    call ClearAll();
+//	ProcessLogic();
+	mem[GetLastModifiedArrayIndex()]	= 1;
+	o[GetLastModifiedArrayIndex()]		= 1;
+}
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+
+Function Main()
+{
+    call Init();
+}
+
+
